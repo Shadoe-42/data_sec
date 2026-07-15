@@ -51,9 +51,9 @@ Two things live in this doc that are easy to conflate but aren't the same: Snowf
 
 **The resolution is crypto-shredding, not waiting out the retention window.** For any subject whose data needs genuine, immediate-effect erasure:
 
-- Regulated-tier data that's subject to individual-level erasure requests should be encrypted at the column or row level with a per-subject or per-tenant data encryption key, not relying solely on Tri-Secret Secure's account-wide key.
+- Regulated-tier data that's subject to individual-level erasure requests is encrypted at the column or row level with a per-tenant data encryption key by default (escalating to per-subject where a specific end user needs independent erasure without ending the tenant relationship), not relying solely on Tri-Secret Secure's account-wide key. The key management mechanism itself — including why the default is per-tenant rather than per-subject — is designed in full in `secrets_management.md`, not just asserted here.
 - On a valid deletion request, the specific key is destroyed. The ciphertext still physically exists in Time Travel and Fail-safe for the remainder of the retention window, but it's unreadable — cryptographically equivalent to deleted, immediately, without waiting on Snowflake's storage lifecycle.
-- This requires the encryption to happen at the application/pipeline layer before data lands in Snowflake (client-side or pipeline-side envelope encryption keyed per subject), since Snowflake's native Tri-Secret Secure operates at the account level, not per-row — the two mechanisms are complementary, not substitutes for each other.
+- This requires the encryption to happen at the application/pipeline layer before data lands in Snowflake (client-side or pipeline-side envelope encryption via HCP Vault's Transit engine, keyed per tenant or per subject), since Snowflake's native Tri-Secret Secure operates at the account level, not per-row — the two mechanisms are complementary, not substitutes for each other.
 
 **Updates `privacy_consent_management.md`:** the deletion/erasure row in the Data Subject Rights table should be read as "row deletion + consent revocation (immediate, self-service) plus per-subject key destruction for Regulated-tier data (immediate cryptographic erasure), with residual ciphertext aging out of Time Travel/Fail-safe over the following weeks" — not a claim that all traces vanish instantly, but an honest one that the data becomes unreadable immediately, which is what actually matters for a genuine erasure obligation.
 
@@ -98,4 +98,4 @@ Updates `soc2_csf_compliance_crosswalk.md`: **Recover (A1.3/CC7.5)** moves from 
 - [Understanding & using Time Travel — Snowflake Documentation](https://docs.snowflake.com/en/user-guide/data-time-travel)
 - [Understanding and viewing Fail-safe — Snowflake Documentation](https://docs.snowflake.com/en/user-guide/data-failsafe)
 - [Storage costs for Time Travel and Fail-safe — Snowflake Documentation](https://docs.snowflake.com/en/user-guide/data-cdp-storage-costs)
-- Internal: `snowflake_data_security_guardrails.md`, `privacy_consent_management.md`, `account_landing_zone_guardrails.md`
+- Internal: `snowflake_data_security_guardrails.md`, `privacy_consent_management.md`, `account_landing_zone_guardrails.md`, `secrets_management.md`
