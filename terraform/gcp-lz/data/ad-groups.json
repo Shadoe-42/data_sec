@@ -1,0 +1,63 @@
+{
+  "org_bindings": [
+    {
+      "group":   "gcp-org-admins@example.com",
+      "role":    "roles/resourcemanager.organizationAdmin",
+      "scope":   "org"
+    },
+    {
+      "group":   "gcp-billing-admins@example.com",
+      "role":    "roles/billing.admin",
+      "scope":   "org"
+    },
+    {
+      "group":   "gcp-security-admins@example.com",
+      "role":    "roles/securitycenter.admin",
+      "scope":   "org"
+    },
+    {
+      "group":   "gcp-network-admins@example.com",
+      "role":    "roles/compute.networkAdmin",
+      "scope":   "org"
+    },
+    {
+      "group":   "gcp-audit-viewers@example.com",
+      "role":    "roles/logging.viewer",
+      "scope":   "org"
+    }
+  ],
+  "folder_bindings": [
+    {
+      "group":   "gcp-dev-engineers@example.com",
+      "role":    "roles/editor",
+      "folder":  "dev"
+    },
+    {
+      "group":   "gcp-staging-deployers@example.com",
+      "role":    "roles/run.developer",
+      "folder":  "staging"
+    },
+    {
+      "group":   "gcp-prod-deployers@example.com",
+      "role":    "roles/run.developer",
+      "folder":  "prod"
+    },
+    {
+      "group":   "gcp-prod-viewers@example.com",
+      "role":    "roles/viewer",
+      "folder":  "prod"
+    }
+  ],
+  "project_bindings": [
+    {
+      "group":   "gcp-data-engineers@example.com",
+      "role":    "roles/bigquery.dataEditor",
+      "project": "dev"
+    },
+    {
+      "group":   "gcp-data-viewers@example.com",
+      "role":    "roles/bigquery.dataViewer",
+      "project": "prod"
+    }
+  ]
+}

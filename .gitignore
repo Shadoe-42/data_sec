@@ -1,0 +1,21 @@
+# Internal working documents — not for public consumption
+TRACKING.md
+audit.md
+tam_conversation_prep.md
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# OS / editor noise
+.DS_Store
+.vscode/
+*.swp

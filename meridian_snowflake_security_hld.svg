@@ -1,0 +1,102 @@
+<svg viewBox="0 0 1200 820" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5b6472"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="820" fill="#ffffff"/>
+
+  <text x="600" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#1a2330">Meridian Analytics — Snowflake AI Data Cloud Security Architecture</text>
+  <text x="600" y="58" text-anchor="middle" font-size="13" fill="#5b6472">Dual-cloud deployment · AWS + GCP · Platform / Data / Agent security pillars</text>
+
+  <!-- AWS column -->
+  <rect x="40" y="90" width="330" height="230" rx="10" fill="#fff4e8" stroke="#d98c2b" stroke-width="1.5"/>
+  <text x="205" y="115" text-anchor="middle" font-size="15" font-weight="700" fill="#8a5316">AWS</text>
+
+  <rect x="65" y="130" width="280" height="45" rx="6" fill="#ffffff" stroke="#d98c2b"/>
+  <text x="205" y="157" text-anchor="middle" font-size="12.5" fill="#3a2a10">Ingestion / App Workloads</text>
+
+  <rect x="65" y="185" width="280" height="45" rx="6" fill="#ffffff" stroke="#d98c2b"/>
+  <text x="205" y="212" text-anchor="middle" font-size="12.5" fill="#3a2a10">AWS PrivateLink → Snowflake endpoint</text>
+
+  <rect x="65" y="240" width="280" height="65" rx="6" fill="#ffffff" stroke="#d98c2b"/>
+  <text x="205" y="262" text-anchor="middle" font-size="12.5" fill="#3a2a10">S3 external stage</text>
+  <text x="205" y="280" text-anchor="middle" font-size="11.5" fill="#6b573a">AWS KMS — customer-managed key (Tri-Secret Secure)</text>
+  <text x="205" y="296" text-anchor="middle" font-size="11" fill="#8a7960">Storage Integration (scoped IAM role)</text>
+
+  <!-- GCP column -->
+  <rect x="830" y="90" width="330" height="230" rx="10" fill="#eaf2ff" stroke="#3a72c4" stroke-width="1.5"/>
+  <text x="995" y="115" text-anchor="middle" font-size="15" font-weight="700" fill="#1f4a86">GCP</text>
+
+  <rect x="855" y="130" width="280" height="45" rx="6" fill="#ffffff" stroke="#3a72c4"/>
+  <text x="995" y="157" text-anchor="middle" font-size="12.5" fill="#1a2a40">Ingestion / App Workloads</text>
+
+  <rect x="855" y="185" width="280" height="45" rx="6" fill="#ffffff" stroke="#3a72c4"/>
+  <text x="995" y="212" text-anchor="middle" font-size="12.5" fill="#1a2a40">Private Service Connect → Snowflake endpoint</text>
+
+  <rect x="855" y="240" width="280" height="65" rx="6" fill="#ffffff" stroke="#3a72c4"/>
+  <text x="995" y="262" text-anchor="middle" font-size="12.5" fill="#1a2a40">GCS external stage</text>
+  <text x="995" y="280" text-anchor="middle" font-size="11.5" fill="#3a557a">Cloud KMS — customer-managed key (Tri-Secret Secure)</text>
+  <text x="995" y="296" text-anchor="middle" font-size="11" fill="#5a7396">Storage Integration (scoped service account)</text>
+
+  <!-- Identity federation, spans both, above Snowflake core -->
+  <rect x="420" y="120" width="360" height="50" rx="6" fill="#f4f0fb" stroke="#7a5fb0"/>
+  <text x="600" y="141" text-anchor="middle" font-size="12.5" fill="#3d2c5c" font-weight="600">Okta / Entra ID</text>
+  <text x="600" y="158" text-anchor="middle" font-size="11" fill="#5c4a80">SCIM provisioning + SAML/OIDC SSO — cloud-agnostic</text>
+
+  <!-- Connectors from AWS/GCP into Snowflake core -->
+  <line x1="345" y1="207" x2="420" y2="380" stroke="#d98c2b" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="855" y1="207" x2="780" y2="380" stroke="#3a72c4" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="600" y1="170" x2="600" y2="380" stroke="#7a5fb0" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Snowflake core -->
+  <rect x="150" y="380" width="900" height="330" rx="12" fill="#eef7fb" stroke="#1a8cc4" stroke-width="2"/>
+  <text x="600" y="408" text-anchor="middle" font-size="16" font-weight="700" fill="#0d4a63">Snowflake AI Data Cloud — Control Plane</text>
+
+  <!-- Platform security -->
+  <rect x="175" y="425" width="270" height="255" rx="8" fill="#ffffff" stroke="#1a8cc4"/>
+  <text x="310" y="450" text-anchor="middle" font-size="13" font-weight="700" fill="#0d4a63">Platform Security</text>
+  <text x="310" y="472" text-anchor="middle" font-size="11" fill="#1a2330">RBAC + ABAC (tag-based)</text>
+  <text x="310" y="492" text-anchor="middle" font-size="11" fill="#1a2330">Network Policies (IP allow-list)</text>
+  <text x="310" y="512" text-anchor="middle" font-size="11" fill="#1a2330">Session policy + MFA enforcement</text>
+  <text x="310" y="532" text-anchor="middle" font-size="11" fill="#1a2330">Tri-Secret Secure (Snowflake +</text>
+  <text x="310" y="548" text-anchor="middle" font-size="11" fill="#1a2330">customer-managed key, multi-party</text>
+  <text x="310" y="564" text-anchor="middle" font-size="11" fill="#1a2330">approval)</text>
+  <text x="310" y="592" text-anchor="middle" font-size="11" fill="#1a2330">Trust Center posture scoring</text>
+
+  <!-- Data security -->
+  <rect x="465" y="425" width="270" height="255" rx="8" fill="#ffffff" stroke="#1a8cc4"/>
+  <text x="600" y="450" text-anchor="middle" font-size="13" font-weight="700" fill="#0d4a63">Data Security</text>
+  <text x="600" y="472" text-anchor="middle" font-size="11" fill="#1a2330">Dynamic Data Masking (column)</text>
+  <text x="600" y="492" text-anchor="middle" font-size="11" fill="#1a2330">Row Access Policies (tenant_id)</text>
+  <text x="600" y="512" text-anchor="middle" font-size="11" fill="#1a2330">Object tagging + auto-classification</text>
+  <text x="600" y="532" text-anchor="middle" font-size="11" fill="#1a2330">Data Movement Policies — block</text>
+  <text x="600" y="548" text-anchor="middle" font-size="11" fill="#1a2330">unauthorized COPY INTO / exfil</text>
+  <text x="600" y="574" text-anchor="middle" font-size="11" fill="#1a2330">Secure Data Sharing / Clean Rooms</text>
+
+  <!-- Agent security -->
+  <rect x="755" y="425" width="270" height="255" rx="8" fill="#ffffff" stroke="#1a8cc4"/>
+  <text x="890" y="450" text-anchor="middle" font-size="13" font-weight="700" fill="#0d4a63">Agent Security</text>
+  <text x="890" y="472" text-anchor="middle" font-size="11" fill="#1a2330">Cortex Analyst / Cortex Search</text>
+  <text x="890" y="492" text-anchor="middle" font-size="11" fill="#1a2330">Agents authenticate as RBAC/ABAC</text>
+  <text x="890" y="508" text-anchor="middle" font-size="11" fill="#1a2330">principals — no separate AI identity</text>
+  <text x="890" y="528" text-anchor="middle" font-size="11" fill="#1a2330">Horizon AI Guardrails —</text>
+  <text x="890" y="544" text-anchor="middle" font-size="11" fill="#1a2330">prompt injection defense</text>
+  <text x="890" y="570" text-anchor="middle" font-size="11" fill="#1a2330">Inference stays inside the</text>
+  <text x="890" y="586" text-anchor="middle" font-size="11" fill="#1a2330">governance boundary</text>
+
+  <!-- Consumers -->
+  <rect x="300" y="750" width="270" height="50" rx="8" fill="#f2f5f8" stroke="#5b6472"/>
+  <text x="435" y="780" text-anchor="middle" font-size="12.5" fill="#1a2330">BI / Embedded Analytics</text>
+
+  <rect x="630" y="750" width="270" height="50" rx="8" fill="#f2f5f8" stroke="#5b6472"/>
+  <text x="765" y="780" text-anchor="middle" font-size="12.5" fill="#1a2330">Cortex AI Apps / Agent Workflows</text>
+
+  <line x1="435" y1="710" x2="435" y2="750" stroke="#5b6472" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="765" y1="710" x2="765" y2="750" stroke="#5b6472" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Legend -->
+  <text x="60" y="345" font-size="10.5" fill="#8a8f98">Identity federates directly into Snowflake — cloud-agnostic. AWS/GCP divergence is limited to</text>
+  <text x="60" y="360" font-size="10.5" fill="#8a8f98">private connectivity, external stage storage, and the customer-managed key backend.</text>
+</svg>

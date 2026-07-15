@@ -1,0 +1,77 @@
+{
+  "permission_sets": [
+    {
+      "name": "OrgAdmin",
+      "description": "Mirrors roles/resourcemanager.organizationAdmin — full org management.",
+      "managed_policy_arn": "arn:aws:iam::aws:policy/AdministratorAccess",
+      "session_duration": "PT4H"
+    },
+    {
+      "name": "BillingAdmin",
+      "description": "Mirrors roles/billing.admin.",
+      "managed_policy_arn": "arn:aws:iam::aws:policy/job-function/Billing",
+      "session_duration": "PT4H"
+    },
+    {
+      "name": "SecurityAdmin",
+      "description": "Mirrors roles/securitycenter.admin.",
+      "managed_policy_arn": "arn:aws:iam::aws:policy/SecurityAudit",
+      "session_duration": "PT4H"
+    },
+    {
+      "name": "NetworkAdmin",
+      "description": "Mirrors roles/compute.networkAdmin.",
+      "managed_policy_arn": "arn:aws:iam::aws:policy/job-function/NetworkAdministrator",
+      "session_duration": "PT4H"
+    },
+    {
+      "name": "AuditViewer",
+      "description": "Mirrors roles/logging.viewer.",
+      "managed_policy_arn": "arn:aws:iam::aws:policy/CloudTrailReadOnlyAccess",
+      "session_duration": "PT8H"
+    },
+    {
+      "name": "DevEngineer",
+      "description": "Mirrors roles/editor scoped to dev — broad but not org-level.",
+      "managed_policy_arn": "arn:aws:iam::aws:policy/PowerUserAccess",
+      "session_duration": "PT8H"
+    },
+    {
+      "name": "Deployer",
+      "description": "Mirrors roles/run.developer — deploy access, not full edit.",
+      "managed_policy_arn": "arn:aws:iam::aws:policy/AWSCodeDeployDeployerAccess",
+      "session_duration": "PT4H"
+    },
+    {
+      "name": "ReadOnlyViewer",
+      "description": "Mirrors roles/viewer.",
+      "managed_policy_arn": "arn:aws:iam::aws:policy/ReadOnlyAccess",
+      "session_duration": "PT8H"
+    },
+    {
+      "name": "DataEditor",
+      "description": "Mirrors roles/bigquery.dataEditor — scoped to Athena/Glue and Snowflake stage buckets.",
+      "managed_policy_arn": "arn:aws:iam::aws:policy/AmazonAthenaFullAccess",
+      "session_duration": "PT8H"
+    },
+    {
+      "name": "DataViewer",
+      "description": "Mirrors roles/bigquery.dataViewer.",
+      "managed_policy_arn": "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess",
+      "session_duration": "PT8H"
+    }
+  ],
+  "assignments": [
+    { "group": "aws-org-admins",       "permission_set": "OrgAdmin",       "account": "network" },
+    { "group": "aws-billing-admins",   "permission_set": "BillingAdmin",   "account": "network" },
+    { "group": "aws-security-admins",  "permission_set": "SecurityAdmin",  "account": "audit-security" },
+    { "group": "aws-network-admins",   "permission_set": "NetworkAdmin",   "account": "network" },
+    { "group": "aws-audit-viewers",    "permission_set": "AuditViewer",    "account": "log-archive" },
+    { "group": "aws-dev-engineers",    "permission_set": "DevEngineer",    "account": "dev" },
+    { "group": "aws-staging-deployers","permission_set": "Deployer",       "account": "staging" },
+    { "group": "aws-prod-deployers",   "permission_set": "Deployer",       "account": "prod" },
+    { "group": "aws-prod-viewers",     "permission_set": "ReadOnlyViewer", "account": "prod" },
+    { "group": "aws-data-engineers",   "permission_set": "DataEditor",     "account": "dev" },
+    { "group": "aws-data-viewers",     "permission_set": "DataViewer",     "account": "prod" }
+  ]
+}
