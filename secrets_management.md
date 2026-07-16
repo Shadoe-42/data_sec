@@ -77,6 +77,20 @@ path "transit-crypto-shred/keys/*" {
 
 ---
 
+## Scope — Which Fields Are Actually Shredded
+
+Everything above designs the mechanism and the granularity. It doesn't say which data actually goes through it, and that gap became concrete the moment `cortex_ai_implementation.md` indexed `ticket_text` — free-form support ticket text, not a structured field with a classification tag already attached — into Cortex Search. Worth closing directly rather than leaving as an implied assumption.
+
+**Structured Regulated-tier fields are in scope by construction.** A payment-metadata column, a government-ID field — anything that gets classified as Regulated-tier during ingest, per `snowflake_data_security_guardrails.md`'s tiering, is encrypted under a Tier 3 key from the moment it lands. This was always the design; it just hadn't been stated as a scope boundary until something outside it showed up.
+
+**Free text is not automatically in scope, and that's the actual gap.** `ticket_text` isn't tagged Regulated-tier — it's unstructured, and nothing about the ingestion path classifies it field-by-field the way a structured schema does. But free text is exactly where a customer pastes an account number into a support ticket describing a billing problem, which means "not classified as Regulated-tier" and "definitely never contains Regulated-tier data" are two different claims, and this design was previously treating them as the same one.
+
+**The fix reuses infrastructure this project already built, rather than inventing new scanning:** `network_security_foundations.md`'s DLP-at-the-landing-layer scanning (Macie / Sensitive Data Protection) is the mechanism that catches Regulated-tier content inside unstructured fields. A ticket flagged by DLP as containing regulated content doesn't get a new, parallel handling path — it gets promoted into the same Tier 3 crypto-shred scope as any other Regulated-tier field, at the row or record level rather than the whole `ticket_text` column being blanket-encrypted (which would make Cortex Search's embedding generation impossible for the 99%+ of tickets that never mention anything regulated). This is a targeted, DLP-triggered escalation, not a change to the default posture for ordinary support text.
+
+**Derived artifacts don't disappear the instant a key is destroyed — they age out on their own schedule, and that needs to be stated as a real bound, not assumed away.** Destroying a Vault Transit key makes the *source* ciphertext permanently unreadable, immediately. It does not reach into a Cortex Search index and delete an embedding already computed from that source before the key was destroyed — `cortex_ai_implementation.md` already documents this exact staleness window for consent revocation ("disappears from this service's next refresh cycle, bounded by `TARGET_LAG`"), and genuine key-destruction erasure has the identical bound, for the identical reason. For a service with a 1-hour `TARGET_LAG`, that's up to an hour where a derived artifact from now-erased source data is still technically present in the index. For most erasure events this is immaterial. **For an erasure request with a hard regulatory deadline, it isn't** — the erasure workflow needs either a `TARGET_LAG` short enough to comfortably clear the deadline, or an explicit forced re-index as part of the erasure runbook, not silent reliance on the next scheduled refresh. This is the same distinction `resilience_disaster_recovery.md` already draws between "the key is destroyed" and "every downstream copy is gone" — worth stating for derived AI artifacts specifically, since they're the newest kind of downstream copy this project has and the least obvious one to remember.
+
+---
+
 ## Vendor Risk — HCP Vault as a Named Subprocessor
 
 The moment Vault holds Regulated-tier key material, HashiCorp becomes a named subprocessor, requiring the same treatment already established for an MSP in `incident_response_runbook.md`: a specific agreement, not an assumption. Two facts worth weighing in that review, stated plainly rather than glossed over: HCP Vault carries its own SOC 2 Type II attestation — a subprocessor holding the same assurance level Meridian is targeting for itself is a coherent vendor-risk posture, not just a trust exercise. HashiCorp is now owned by IBM (announced 2024, closed 2025), which generally supports lower vendor risk — a larger, better-capitalized, more risk-averse parent than an independent company of HashiCorp's prior size. The one honest caveat: M&A integration periods can introduce short-term roadmap or support uncertainty even when the acquirer is stable. Worth a line in a real vendor risk review, not a reason to reconsider the choice.
@@ -92,6 +106,8 @@ Vault can also mint short-lived, dynamically-provisioned credentials on demand �
 ## What This Closes
 
 Resolves the one open dependency `resilience_disaster_recovery.md` explicitly flagged: the per-subject/per-tenant key management service behind crypto-shredding is no longer asserted, it's designed — mechanism, granularity decision, access control, and vendor-risk treatment all specified. `resilience_disaster_recovery.md`'s erasure section should be read as pointing here for the "how," not treating the key service as a black box.
+
+Also resolves the scope question `cortex_ai_implementation.md` exposed but didn't answer: which fields are actually shredded, how free-text data gets into scope without blanket-encrypting every unstructured column, and how derived AI artifacts (search indices, embeddings) relate to a source key's destruction. That doc should be read as pointing here for scope, the same way it already points to `privacy_consent_management.md` for consent.
 
 ---
 
